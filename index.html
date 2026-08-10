@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lien</title>
+  <style>
+    html, body, #root {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #140c22;
+      overflow-x: hidden;
+    }
+    body { overscroll-behavior-x: none; }
+
+    /* Retire uniquement le cadre téléphone : le contenu/design intérieur reste inchangé. */
+    #root > div {
+      min-height: 100vh !important;
+      width: 100% !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: stretch !important;
+      justify-content: stretch !important;
+      overflow: hidden !important;
+    }
+    #root .duo-root {
+      width: 100% !important;
+      max-width: none !important;
+      height: 100vh !important;
+      min-height: 100vh !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    /* Ancienne encoche du téléphone */
+    #root .duo-root > div[style*="width: 70px"] { display: none !important; }
+
+    /* Le bouton 💬 reste au-dessus de la fenêtre de chat et ne gêne plus Envoyer. */
+    #root button[aria-label="Ouvrir les messages"] {
+      bottom: 142px !important;
+      z-index: 100 !important;
+    }
+
+    /* La poignée du chat capture le geste au lieu de faire défiler la page. */
+    #root .duo-root div[style*="cursor: ns-resize"] {
+      touch-action: none !important;
+      -webkit-user-select: none !important;
+      user-select: none !important;
+      -webkit-touch-callout: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
