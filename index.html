@@ -5,50 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Lien</title>
   <style>
-    html, body, #root {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      background: #140c22;
-      overflow-x: hidden;
-    }
-    body { overscroll-behavior-x: none; }
+/* ===== AFFICHAGE MOBILE PLEIN ÉCRAN ===== */
 
-    /* Retire uniquement le cadre téléphone : le contenu/design intérieur reste inchangé. */
-    #root > div {
-      min-height: 100vh !important;
-      width: 100% !important;
-      padding: 0 !important;
-      display: flex !important;
-      align-items: stretch !important;
-      justify-content: stretch !important;
-      overflow: hidden !important;
-    }
-    #root .duo-root {
-      width: 100% !important;
-      max-width: none !important;
-      height: 100vh !important;
-      min-height: 100vh !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-    }
-    /* Ancienne encoche du téléphone */
-    #root .duo-root > div[style*="width: 70px"] { display: none !important; }
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: pan-y !important;
+}
 
-    /* Le bouton 💬 reste au-dessus de la fenêtre de chat et ne gêne plus Envoyer. */
-    #root button[aria-label="Ouvrir les messages"] {
-      bottom: 142px !important;
-      z-index: 100 !important;
-    }
+/* Retire le cadre téléphone */
+#root > div {
+  width: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
 
-    /* La poignée du chat capture le geste au lieu de faire défiler la page. */
-    #root .duo-root div[style*="cursor: ns-resize"] {
-      touch-action: none !important;
-      -webkit-user-select: none !important;
-      user-select: none !important;
-      -webkit-touch-callout: none !important;
+#root .duo-root {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  max-height: 100dvh !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* Ancienne encoche du téléphone */
+#root .duo-root > div[style*="width: 70px"] {
+  display: none !important;
+}
+
+/* Empêche absolument le déplacement gauche/droite */
+#root,
+#root .duo-root,
+#root .duo-root > * {
+  max-width: 100vw !important;
+}
+
+body {
+  overscroll-behavior-x: none !important;
+}
+
+/* ===== ADAPTATION À LA HAUTEUR DU TÉLÉPHONE ===== */
+
+/* Le contenu principal ne peut plus pousser la navigation hors écran */
+#root .duo-root {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Le bouton messages reste accessible au-dessus de la navigation */
+#root button[aria-label="Ouvrir les messages"] {
+  bottom: 142px !important;
+  right: 14px !important;
+  z-index: 100 !important;
+}
+
+/* ===== CHAT ===== */
+
+#root .duo-root div[style*="cursor: ns-resize"] {
+  touch-action: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* La fenêtre de messages ne peut jamais dépasser l'écran */
+#root .duo-root div[style*="position: absolute"][style*="height:"] {
+  max-height: calc(100dvh - 150px) !important;
+}
+
+/* Empêche les éléments du chat de créer une largeur supplémentaire */
+#root .duo-root input,
+#root .duo-root button {
+  max-width: 100%;
+  box-sizing: border-box;
+}
     }
   </style>
 </head>
