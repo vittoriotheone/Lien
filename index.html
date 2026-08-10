@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#140c22">
+  <title>Lien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html,body,#root{margin:0;padding:0;min-height:100vh;background:#140c22}
+    body{overflow-x:hidden}
+    #boot-error{display:none;position:fixed;inset:0;z-index:99999;box-sizing:border-box;padding:24px;background:#140c22;color:#f5efe6;font:14px system-ui,-apple-system,sans-serif;align-items:center;justify-content:center}
+    #boot-error>div{max-width:760px;width:100%}
+    #boot-error h1{color:#ff8b66;font-size:22px}
+    #boot-error pre{white-space:pre-wrap;text-align:left;background:rgba(255,255,255,.06);padding:14px;border-radius:12px;overflow:auto;font-size:12px}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="boot-error"><div><h1>Impossible de charger Lien</h1><p>Une erreur JavaScript empêche l'application de démarrer.</p><pre id="boot-error-message"></pre></div></div>
+
+  <script>
+    function showBootError(err){
+      const box=document.getElementById('boot-error'), msg=document.getElementById('boot-error-message');
+      if(!box||!msg)return;
+      msg.textContent=(err&&err.stack)||String(err||'Erreur inconnue');
+      box.style.display='flex';
+    }
+    window.addEventListener('error',e=>{ if(e.error) showBootError(e.error); });
+    window.addEventListener('unhandledrejection',e=>showBootError(e.reason));
+  </script>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- IMPORTANT: do NOT use type=text/babel here. We fetch the source and
+       call Babel.transform ourselves, which avoids Babel's script injection
+       path that was producing the misleading 'import' error. -->
+  <script>
+    (async function(){
+      try {
+        if(!window.React || !window.ReactDOM || !window.Babel) throw new Error('Une dépendance React/Babel n’a pas pu être chargée.');
+        const response=await fetch('./app.jsx', {cache:'no-store'});
+        if(!response.ok) throw new Error('Impossible de charger app.jsx (HTTP '+response.status+').');
+        const source=await response.text();
+        const result=Babel.transform(source,{presets:['react'],sourceType:'script',filename:'app.jsx'});
+        new Function('React','ReactDOM',result.code)(window.React,window.ReactDOM);
+      } catch(err) {
+        showBootError(err);
+      }
+    })();
+  </script>
+</body>
+</html>
